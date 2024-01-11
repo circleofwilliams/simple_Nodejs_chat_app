@@ -1,5 +1,5 @@
 # A SIMPLE NODE.js GROUP CHATTING APP
-This application was built as a means of testing my knowledge after watching a nodejs networking video.
+This application was built as a means of testing my knowledge after watching a nodejs stream and networking video.
 
 ## DESCRIPTION OF THE APP
 The application has two units, the client and the server.
