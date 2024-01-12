@@ -7,6 +7,10 @@ const server = net.createServer();
 
 server.on("connection", (socket) => {
   console.log("A new connection to the server.");
+
+  socket.on("data", (data) => {
+    socket.write(data);
+  });
 });
 
 server.listen(port, hostingInterface, () => {
