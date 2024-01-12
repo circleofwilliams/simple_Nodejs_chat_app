@@ -1,31 +1,37 @@
 const net = require("net");
-const readline = require("readline/promises");
+const readline = require("readline");
 
 const host = "127.0.0.1";
 const port = 3000;
+
 const readMessageInterface = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-const sendMessage = async () => {
-  const message = await readMessageInterface.question("Enter your message > ");
-  client.write(message);
-  // await clearLine(0);
+const clearLine = () => {
+  process.stdout.moveCursor(0, -1);
+  process.stdout.cursorTo(0);
+  process.stdout.clearLine();
 };
 
-// const clearLine = async (direction) => {
-//   return new Promise((resolve, reject) => {
-//     process.stdout.clearLine(direction, () => resolve());
-//   });
-// };
+const sendMessage = () => {
+  readMessageInterface.question("Enter your message > ", (message) => {
+    message = Buffer.from(message);
+    client.write(message);
+    clearLine();
+    sendMessage(); // Call sendMessage again to prompt for the next message
+  });
+};
 
-const client = net.createConnection({ host, port }, async () => {
+const client = net.createConnection({ host, port }, () => {
   console.log("connected to", host);
-  await sendMessage();
+  sendMessage();
 });
 
-client.on("data", async (data) => {
+client.on("data", (data) => {
+  process.stdout.cursorTo(0);
+  process.stdout.clearLine();
   console.log(data.toString("utf-8"));
-  await sendMessage();
+  sendMessage();
 });
